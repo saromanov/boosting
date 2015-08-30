@@ -4,6 +4,7 @@ class Adaboost:
     def __init__(self, rate=0.001, init='standard'):
         self.rate = rate
         self.init = init
+        self.hyp = []
 
     def _init_weights(self, m):
         W = np.ones((m,))
@@ -14,9 +15,16 @@ class Adaboost:
     def _update_weights(self, W):
         return W/W.sum()
 
+    def addHypothesis(self, func):
+        self.hyp.append(func)
+
     def fit(self, X, y):
         n = X.shape[0]
         assert(n == y.shape[0])
         W = self._init_weights(X.shape[0])
+        hypo = self.hyp[0]
         for i in range(n):
-            pass
+            for h in self.hyp:
+                res = h(X[i])
+        return np.sign(np.sum([alpha * h(x) for x in self.X]))
+
