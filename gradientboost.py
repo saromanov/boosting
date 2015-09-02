@@ -15,8 +15,11 @@ class GradientBoost:
     def _update(self, items):
         pass
 
-    def _loss(self, x, y):
+    def _square_loss(self, x, y):
         return (x - y)**2
+
+    def _logistic_loss(self, x, y):
+        return x * np.log(1 + np.exp(-y)) + (1 - x) * np.log(1 + np.exp(y))
 
     def fit(self, X, y, iters=100):
         n = X.shape[0]
