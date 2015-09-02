@@ -18,6 +18,9 @@ class Adaboost:
     def _update_rate(self, error):
         return 0.5 * np.log((1 - error)/error)
 
+    def _error(self, x, y):
+        return np.exp(-y * x)
+
     def addHypothesis(self, func):
         self.hyp.append(func)
 
@@ -31,6 +34,7 @@ class Adaboost:
         W = self._init_weights(X.shape[0])
         hypo = self.hyp[0]
         for i in range(n):
+            alpha = self._update_rate(err)
             for h in self.hyp:
                 res = h(X[i])
         return np.sign(np.sum([self.rate * h(x) for x in self.X]))
