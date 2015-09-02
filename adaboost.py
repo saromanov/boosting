@@ -22,6 +22,10 @@ class Adaboost:
         self.hyp.append(func)
 
     def fit(self, X, y):
+        ''' Args:
+            X - n^d array
+            y - 1d array with same length as X
+        '''
         n = X.shape[0]
         assert(n == y.shape[0])
         W = self._init_weights(X.shape[0])
