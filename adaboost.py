@@ -2,6 +2,10 @@ import numpy as np
 
 class Adaboost:
     def __init__(self, init='normal'):
+        '''
+          Args:
+              init - choose type of weights initialization (normal, partial)
+        '''
         self.init = init
         self.hyp = []
 
