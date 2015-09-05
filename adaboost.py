@@ -1,8 +1,7 @@
 import numpy as np
 
 class Adaboost:
-    def __init__(self, rate=0.001, init='normal'):
-        self.rate = rate
+    def __init__(self, init='normal'):
         self.init = init
         self.hyp = []
 
