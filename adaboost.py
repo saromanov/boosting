@@ -1,7 +1,7 @@
 import numpy as np
 
 class Adaboost:
-    def __init__(self, rate=0.001, init='standard'):
+    def __init__(self, rate=0.001, init='normal'):
         self.rate = rate
         self.init = init
         self.hyp = []
@@ -10,6 +10,8 @@ class Adaboost:
         W = np.ones((m,))
         if self.init == 'normal':
             W = np.random.normal(0,0.1, m)
+        if self.init == 'partial':
+            W = np.ones((m,))/m
         return W
 
     def _update_weights(self, W):
