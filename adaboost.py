@@ -30,10 +30,14 @@ class Adaboost:
         assert(n == y.shape[0])
         W = self._init_weights(X.shape[0])
         hypo = self.hyp[0]
+        terr = 999999
         for i in range(len(self.hyp)):
             err = np.sum([W[j] * self._error(self.hyp[i](X[j]), y[i]) for j in range(n)])
+            if err < terr:
+                terr = err
+                hypo = self.hyp[i]
             alpha = 0.5 * np.log((1 - err)/err)
 
-            W = W * np.exp(alpha * y * self.hyp[i](X))
-        return np.sign(np.sum([self.rate * h(x) for x in self.X]))
+            W = W * np.exp(alpha * y * self.hypo(X))
+        return np.sign(np.sum([self.rate * hypo(x) for x in self.X]))
 
