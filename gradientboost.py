@@ -24,7 +24,12 @@ class GradientBoost:
     def fit(self, X, y, iters=100):
         n = X.shape[0]
         assert(n == y.shape[0])
+        assert(len(hyp) > 0)
         params = np.ones(n)
+        prev = self.hyp[0](X)
         for i in range(iters):
             grad = self._loss(X, y)
+            prev = prev + self.hyp[i](X)
+
+
 
