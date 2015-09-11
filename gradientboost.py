@@ -6,6 +6,8 @@ from scipy.optimize import line_search
 
 class GradientBoost:
     def __init__(self, lrate=0.001):
+        ''' In the case if learning rate is const
+        '''
         self.lrate = lrate
         self.hyp = []
 
@@ -21,6 +23,9 @@ class GradientBoost:
     def _logistic_loss(self, x, y):
         return x * np.log(1 + np.exp(-y)) + (1 - x) * np.log(1 + np.exp(y))
 
+    def _negative_gradient(self, loss, X, y):
+        pass
+
     def fit(self, X, y, iters=100):
         n = X.shape[0]
         assert(n == y.shape[0])
@@ -28,8 +33,9 @@ class GradientBoost:
         params = np.ones(n)
         prev = self.hyp[0](X)
         for i in range(iters):
-            grad = self._loss(X, y)
-            prev = prev + self.hyp[i](X)
+            grad = self._negative_gradient(self._loss, X, y)
+            prev = prev + self.lrate * self.hyp[i](X)
+        return prev
 
 
 
