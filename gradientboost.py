@@ -45,5 +45,9 @@ class GradientBoost:
             prev = prev + self.lrate * self.hyp[i](X)
         return prev
 
+    def predict(self, X):
+        for h in self.hyp:
+            pass
+
 
 
