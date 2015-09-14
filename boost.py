@@ -16,3 +16,6 @@ class Boost:
     def _get_dataset_size(self, item):
         return item.shape[0] if type(item).__module__ == np.__name__ else len(item)
 
+    def _to_numpy(self, item):
+        return np.array(item)
+
