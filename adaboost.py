@@ -1,11 +1,13 @@
 import numpy as np
+import boost
 
-class Adaboost:
+class Adaboost(boost.Boost):
     def __init__(self, init='normal'):
         '''
           Args:
               init - choose type of weights initialization (normal, partial)
         '''
+        super(Adaboost, self).__init__(self)
         self.init = init
         self.hyp = []
 
@@ -31,9 +33,9 @@ class Adaboost:
             X - n^d array
             y - 1d array with same length as X
         '''
-        n = X.shape[0]
-        assert(n == y.shape[0])
-        W = self._init_weights(X.shape[0])
+        n = self._get_dataset_size(X)
+        W = self._init_weights(n)
+        print(self.hyp)
         hypo = self.hyp[0]
         terr = 999999
         for i in range(len(self.hyp)):
@@ -43,6 +45,6 @@ class Adaboost:
                 hypo = self.hyp[i]
             alpha = 0.5 * np.log((1 - err)/err)
 
-            W = W * np.exp(alpha * y * self.hypo(X))
+            W = W * np.exp(alpha * y * hypo(X))
         return np.sign(np.sum([self.rate * hypo(x) for x in self.X]))
 
