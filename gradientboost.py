@@ -26,14 +26,19 @@ class GradientBoost:
     def _negative_gradient(self, loss, X, y):
         pass
 
+    def _get_dataset_size(self, item):
+        return item.shape[0] if type(item).__module__ == np.__name__ else len(item)
+
+
     def fit(self, X, y, iters=100):
         ''' Args:
               X - dataset of training points
               y - dataset of training labels
         '''
-        n = X.shape[0]
-        assert(n == y.shape[0])
-        assert(len(hyp) > 0)
+        n = self._get_dataset_size(X)
+        ny = self._get_dataset_size(y)
+        assert(n == ny)
+        assert(len(self.hyp) > 0)
         params = np.ones(n)
         prev = self.hyp[0](X)
         for i in range(iters):
