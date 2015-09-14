@@ -27,6 +27,10 @@ class GradientBoost:
         pass
 
     def fit(self, X, y, iters=100):
+        ''' Args:
+              X - dataset of training points
+              y - dataset of training labels
+        '''
         n = X.shape[0]
         assert(n == y.shape[0])
         assert(len(hyp) > 0)
