@@ -35,16 +35,18 @@ class Adaboost(boost.Boost):
         '''
         n = self._get_dataset_size(X)
         W = self._init_weights(n)
-        print(self.hyp)
         hypo = self.hyp[0]
         terr = 999999
+        if self._is_numpy(X) is False:
+            X = self._to_numpy(X)
+        if self._is_numpy(y) is False:
+            y = self._to_numpy(y)
         for i in range(len(self.hyp)):
             err = np.sum([W[j] * self._error(self.hyp[i](X[j]), y[i]) for j in range(n)])
             if err < terr:
                 terr = err
                 hypo = self.hyp[i]
             alpha = 0.5 * np.log((1 - err)/err)
-
             W = W * np.exp(alpha * y * hypo(X))
         return np.sign(np.sum([self.rate * hypo(x) for x in self.X]))
 
