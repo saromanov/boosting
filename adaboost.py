@@ -2,7 +2,7 @@ import numpy as np
 import boost
 
 class Adaboost(boost.Boost):
-    def __init__(self, init='normal'):
+    def __init__(self, init='partial'):
         '''
           Args:
               init - choose type of weights initialization (normal, partial)
@@ -14,7 +14,7 @@ class Adaboost(boost.Boost):
     def _init_weights(self, m):
         W = np.ones((m,))
         if self.init == 'normal':
-            W = np.random.normal(0,0.1, m)
+            W = np.random.normal(0,0.5, m)
         if self.init == 'partial':
             W = np.ones((m,))/m
         return W
@@ -35,18 +35,23 @@ class Adaboost(boost.Boost):
         '''
         n = self._get_dataset_size(X)
         W = self._init_weights(n)
+        assert(len(self.hyp) > 0)
         hypo = self.hyp[0]
         terr = 999999
+        self.rate = 0.001
         if self._is_numpy(X) is False:
             X = self._to_numpy(X)
         if self._is_numpy(y) is False:
             y = self._to_numpy(y)
+        print(W)
         for i in range(len(self.hyp)):
-            err = np.sum([W[j] * self._error(self.hyp[i](X[j]), y[i]) for j in range(n)])
+            err = np.sum([W[j] * self._loss(self.hyp[i](X[j]), y[i]) for j in range(n)])
+            print(err)
             if err < terr:
                 terr = err
                 hypo = self.hyp[i]
             alpha = 0.5 * np.log((1 - err)/err)
-            W = W * np.exp(alpha * y * hypo(X))
-        return np.sign(np.sum([self.rate * hypo(x) for x in self.X]))
+            self.rate = alpha
+            W = W * np.exp(-alpha)
+        return np.sign(np.sum([self.rate * hypo(x) for x in X]))
 
