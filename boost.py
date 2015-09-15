@@ -4,6 +4,9 @@ class Boost:
     def __init__(self, lrate=0.001):
         self.lrate = lrate
 
+    def _loss(self, x, y):
+        return x != y
+
     def _square_loss(self, x, y):
         return (x - y)**2
 
