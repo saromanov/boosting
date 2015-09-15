@@ -22,3 +22,9 @@ class Boost:
     def _to_numpy(self, item):
         return np.array(item)
 
+    def fit(self, X, y):
+        raise NotImplementedError()
+
+    def predict(self, X):
+        raise NotImplementedError()
+
