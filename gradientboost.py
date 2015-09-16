@@ -1,13 +1,15 @@
 ''' Implementation of gradient boosting
 '''
 import numpy as np
+import boost
 from scipy.optimize import line_search
 
 
-class GradientBoost:
+class GradientBoost(boost.Boost):
     def __init__(self, lrate=0.001):
         ''' In the case if learning rate is const
         '''
+        super(GradientBoost, self).__init__(self)
         self.lrate = lrate
         self.hyp = []
 
@@ -24,7 +26,7 @@ class GradientBoost:
         return x * np.log(1 + np.exp(-y)) + (1 - x) * np.log(1 + np.exp(y))
 
     def _negative_gradient(self, loss, X, y):
-        pass
+        return 1-y
 
     def _get_dataset_size(self, item):
         return item.shape[0] if type(item).__module__ == np.__name__ else len(item)
@@ -37,10 +39,9 @@ class GradientBoost:
         '''
         n = self._get_dataset_size(X)
         ny = self._get_dataset_size(y)
-        assert(n == ny)
         assert(len(self.hyp) > 0)
         params = np.ones(n)
-        prev = self.hyp[0](X)
+        prev = [self.hyp[0](x) for x in X]
         for i in range(iters):
             grads = [self._negative_gradient(self._loss, X[i], y[i]) for i in range(n)]
             h = self.hyp[0](X)
@@ -53,6 +54,7 @@ class GradientBoost:
             self.lrate = np.sum(self._loss(prev + self.lrate * h(X)))
             prev = prev + self.lrate * self.hyp[i](X)
         return prev
+
 
     def predict(self, X):
         for h in self.hyp:
