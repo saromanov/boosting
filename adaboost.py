@@ -50,7 +50,10 @@ class Adaboost(boost.Boost):
             self.rates.append(alpha)
             W = W * np.exp(-alpha)
         self.hypo = hypo
-        return np.sign(np.sum([self.rate * hypo(x) for x in X]))
+
+    def _output(self, X, hypos):
+        for x in X:
+            print(np.sign(np.sum([self.rates[i] * hypos[i](x) for i in range(len(hypos))])))
 
     def predict(self, X):
-        pass
+        return self._output(X, self.hyp)
