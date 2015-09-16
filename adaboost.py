@@ -10,6 +10,8 @@ class Adaboost(boost.Boost):
         super(Adaboost, self).__init__(self)
         self.init = init
         self.hyp = []
+        self.rates = []
+        self.hypo = None
 
     def _init_weights(self, m):
         W = np.ones((m,))
@@ -37,21 +39,18 @@ class Adaboost(boost.Boost):
         W = self._init_weights(n)
         assert(len(self.hyp) > 0)
         hypo = self.hyp[0]
-        terr = 999999
         self.rate = 0.001
         if self._is_numpy(X) is False:
             X = self._to_numpy(X)
         if self._is_numpy(y) is False:
             y = self._to_numpy(y)
-        print(W)
         for i in range(len(self.hyp)):
             err = np.sum([W[j] * self._loss(self.hyp[i](X[j]), y[i]) for j in range(n)])
-            print(err)
-            if err < terr:
-                terr = err
-                hypo = self.hyp[i]
             alpha = 0.5 * np.log((1 - err)/err)
-            self.rate = alpha
+            self.rates.append(alpha)
             W = W * np.exp(-alpha)
+        self.hypo = hypo
         return np.sign(np.sum([self.rate * hypo(x) for x in X]))
 
+    def predict(self, X):
+        pass
