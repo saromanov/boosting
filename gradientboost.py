@@ -43,7 +43,8 @@ class GradientBoost(boost.Boost):
         params = np.ones(n)
         prev = [self.hyp[0](x) for x in X]
         for i in range(iters):
-            grads = [self._negative_gradient(self._loss, X[i], y[i]) for i in range(n)]
+            grads = [self._negative_gradient(self._loss, X[j], y[j]) for j in range(n)]
+            print(grads)
             h = self.hyp[0](X)
             smallerr = np.sum(self._logistic_loss(h(X), y))
             for i in range(1, len(self.hyp)):
@@ -52,7 +53,7 @@ class GradientBoost(boost.Boost):
                     smallerr = current
                     h = self.hyp[i]
             self.lrate = np.sum(self._loss(prev + self.lrate * h(X)))
-            prev = prev + self.lrate * self.hyp[i](X)
+            prev = prev + self.lrate * [self.hyp[i](x) for x in X]
         return prev
 
 
