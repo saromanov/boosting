@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.optimiza import fmin
+from scipy.optimize import fmin
 
 class LSBoost:
     def __init__(self):
