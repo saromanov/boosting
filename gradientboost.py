@@ -37,6 +37,13 @@ class GradientBoost(boost.Boost):
     def _get_dataset_size(self, item):
         return item.shape[0] if type(item).__module__ == np.__name__ else len(item)
 
+    def find_rate(self, phi, *args):
+        x = args[0]
+        prev = args[1]
+        hm = args[2]
+        y = args[3]
+        return np.sum(self._logistic_loss(prev(x) + phi * hm(x), y))
+
 
     def fit(self, X, y, iters=100):
         ''' Args:
@@ -56,8 +63,9 @@ class GradientBoost(boost.Boost):
             if current < smallerr:
                 smallerr = current
                 h = self.hyp[i]
-            self.lrate = np.sum(self._loss(prev + self.lrate * h(X)))
-            prev = prev + self.lrate * [self.hyp[i](x) for x in X]
+            lrate = minimize(self.find_rate, args=(X, prev, h, y), method='L-BFGS-B')
+            #self.lrate = np.sum(self._loss(prev + self.lrate * h(X)))
+            prev = prev + lrate * [self.hyp[i](x) for x in X]
         return prev
 
 
