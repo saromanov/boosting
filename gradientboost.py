@@ -11,10 +11,16 @@ class GradientBoost(boost.Boost):
         '''
         super(GradientBoost, self).__init__(self)
         self.lrate = lrate
+        self.dfunc = None
         self.hyp = []
 
     def addHypothesis(self, func):
         self.hyp.append(func)
+
+    def addDiffFunc(self, func):
+        ''' add differential loss function
+        '''
+        self.dfunc = func
 
     def _update(self, items):
         pass
@@ -42,12 +48,11 @@ class GradientBoost(boost.Boost):
         assert(len(self.hyp) > 0)
         params = np.ones(n)
         prev = [self.hyp[0](x) for x in X]
-        grads = [self._negative_gradient(self._loss, X[j], y[j]) for j in range(n)]
-        print(grads)
         h = self.hyp[0](X)
         smallerr = np.sum(self._logistic_loss(h(X), y))
         for i in range(1, len(self.hyp)):
             current = np.sum(self._logistic_loss(self.hyp[0](X), y))
+            grads = [self.dfunc(self._loss, X[j], y[j]) for j in range(n)]
             if current < smallerr:
                 smallerr = current
                 h = self.hyp[i]
