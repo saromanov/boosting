@@ -7,19 +7,19 @@ from scipy.optimize import line_search
 
 class GradientBoost(boost.Boost):
     def __init__(self, lrate=0.001):
-        ''' In the case if learning rate is const
-        '''
+        """ In the case if learning rate is const
+        """
         super(GradientBoost, self).__init__(self)
         self.lrate = lrate
         self.dfunc = None
         self.hyp = []
 
-    def addHypothesis(self, func):
+    def add_hypothesis(self, func):
         self.hyp.append(func)
 
-    def addDiffFunc(self, func):
-        ''' add differential loss function
-        '''
+    def add_diff_Func(self, func):
+        """ add differential loss function
+        """
         self.dfunc = func
 
     def _update(self, items):
@@ -46,10 +46,11 @@ class GradientBoost(boost.Boost):
 
 
     def fit(self, X, y, iters=100):
-        ''' Args:
-              X - dataset of training points
-              y - dataset of training labels
-        '''
+        """ fitting of the model
+        
+            :param X: n^d array
+            :param y 1d array with same length as X
+        """
         n = self._get_dataset_size(X)
         ny = self._get_dataset_size(y)
         assert(len(self.hyp) > 0)
@@ -64,7 +65,6 @@ class GradientBoost(boost.Boost):
                 smallerr = current
                 h = self.hyp[i]
             lrate = minimize(self.find_rate, args=(X, prev, h, y), method='L-BFGS-B')
-            #self.lrate = np.sum(self._loss(prev + self.lrate * h(X)))
             prev = prev + lrate * [self.hyp[i](x) for x in X]
         return prev
 

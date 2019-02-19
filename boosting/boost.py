@@ -1,6 +1,11 @@
 import numpy as np
 
 class Boost:
+    """ Basic class for boosting algorithms
+    this class contains helpful methods
+    like loss, logistic regression methods and
+    basic methods like fit and predict
+    """ 
     def __init__(self, lrate=0.001):
         self.lrate = lrate
 
