@@ -1,9 +1,13 @@
 import numpy as np
 from scipy.optimize import fmin
 
-class LSBoost:
+class LSBoost(boost.Boost):
+    """ implementation of LS Boost algorithm
+    https://arxiv.org/abs/1505.04243
+    """
     def __init__(self):
         self.hyp = []
+        super(LSBoost, self).__init__(self)
 
     def addHypothesis(self, func):
         self.hyp.append(func)
